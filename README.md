@@ -25,10 +25,8 @@ Most transport fleets still run on spreadsheets, logbooks, and phone calls - a l
 - [Status Lifecycles](#status-lifecycles)
 - [Analytics and KPIs](#analytics-and-kpis)
 - [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
 - [API Overview](#api-overview)
 - [Example Workflow](#example-workflow)
-- [Deliverables Checklist](#deliverables-checklist)
 - [Team](#team)
 
 ---
@@ -50,43 +48,38 @@ Four roles, all behind a single RBAC-gated login:
 
 ## Features
 
-| Area | What it does | Where it lives |
-|---|---|---|
-| 🔐 Auth & RBAC | Email/password login, role-gated views for all four roles | `pages/Auth`, `context/AuthContext.jsx` |
-| 📊 Dashboard | KPI tiles, filterable by vehicle type, status, and region | `pages/Dashboard` |
-| 🚐 Fleet | Vehicle registry — reg. number, type, load capacity, odometer, cost, status | `pages/Fleet` |
-| 🧑‍✈️ Drivers | Driver profiles — license, expiry, contact, safety score, status | `pages/Drivers` |
-| 🗺️ Trips | Create & dispatch trips, full lifecycle, validation rules | `pages/Trips` |
-| 🔧 Maintenance | Log maintenance work, auto-flips vehicle status to In Shop | `pages/Maintenance` |
-| ⛽ Fuel & Expenses | Fuel logs plus tolls/other costs, automatic cost rollups | `pages/FuelExpenses` |
-| 📈 Analytics | Fuel efficiency, fleet utilization, operational cost, ROI, CSV export | `pages/Analytics` |
+| Area | What it does | 
+|---|---|
+| 🔐 Auth & RBAC | Email/password login, role-gated views for all four roles |
+| 📊 Dashboard | KPI tiles, filterable by vehicle type, status, and region |
+| 🚐 Fleet | Vehicle registry — reg. number, type, load capacity, odometer, cost, status | 
+| 🧑‍✈️ Drivers | Driver profiles — license, expiry, contact, safety score, status |
+| 🗺️ Trips | Create & dispatch trips, full lifecycle, validation rules |
+| 🔧 Maintenance | Log maintenance work, auto-flips vehicle status to In Shop |
+| ⛽ Fuel & Expenses | Fuel logs plus tolls/other costs, automatic cost rollups |
+| 📈 Analytics | Fuel efficiency, fleet utilization, operational cost, ROI, CSV export |
 
 ## Tech Stack
 
-**Frontend** - `client/transitops`
+**Frontend** 
 - React + Vite, JavaScript/JSX
 - Tailwind CSS with a shared `components/ui` kit
-- React Context for auth state (`AuthContext.jsx`)
+- React Context for auth state
 - Bun as package manager & dev runtime
 
-**Backend** - `server`
+**Backend**
 - Bun + TypeScript
 - Express-style REST API (controller → route → model)
 - JWT-based auth middleware
-- MongoDB for storage (swap this line if `config/db.ts` says otherwise)
-
-**Tooling**
-- ESLint on the client
-- `test.rest` for API testing (REST Client)
-- Scaffolded with help from Claude Code
+- MongoDB for storage 
 
 ## Project Structure
 
 ```
 .
 ├── client/
-│   └── transitops/     → React + Vite frontend
-├── server/              → Bun + TypeScript backend
+│   └── transitops/     
+├── server/              
 └── README.md
 ```
 
@@ -133,7 +126,7 @@ client/transitops/
 │   ├── favicon.svg
 │   └── icons.svg
 ├── src/
-│   ├── assets/            → design mockups, hero image, icons
+│   ├── assets/            
 │   ├── components/
 │   │   ├── Auth/
 │   │   ├── dashboard/
@@ -247,8 +240,6 @@ stateDiagram-v2
 | Vehicle ROI | (Revenue - (Maintenance + Fuel)) ÷ Acquisition Cost |
 | Fleet Utilization (%) | Not pinned down in the brief - Vehicles On Trip ÷ Total Active Vehicles × 100 is a reasonable default |
 
-CSV export is required; PDF export is a bonus.
-
 ## Getting Started
 
 **Prerequisites:** [Bun](https://bun.sh) installed, plus a running database instance for whatever `server/config/db.ts` connects to.
@@ -256,8 +247,7 @@ CSV export is required; PDF export is a bonus.
 **1. Backend**
 ```bash
 cd server
-bun install
-cp .env.example .env   # fill in DB connection, JWT secret, PORT
+bun install   
 bun run index.ts       # or `bun run dev` if a dev script is set up
 ```
 
@@ -267,22 +257,7 @@ cd client/transitops
 bun install
 bun run dev
 ```
-Vite serves the app at `http://localhost:5173` by default.
-
-## Environment Variables
-
-`server/.env`
-
-| Variable | Purpose |
-|---|---|
-| `PORT` | Port the API runs on |
-| `MONGODB_URI` | Database connection string |
-| `JWT_SECRET` | Signing secret for auth tokens |
-| `JWT_EXPIRES_IN` | Token lifetime *(optional)* |
-
 ## API Overview
-
-Routes live in `server/routes/`, each wired to a matching controller:
 
 | Route file | Handles |
 |---|---|
@@ -292,10 +267,6 @@ Routes live in `server/routes/`, each wired to a matching controller:
 | `trip.routes.ts` | Trip CRUD, dispatch / complete / cancel |
 | `expense.routes.ts` | Fuel logs & other expenses |
 | `analytics.routes.ts` | Dashboard KPIs, reports, CSV export |
-
-`maintenance.controller.ts` exists but didn't show a matching route file in this pass - worth wiring up or double-checking where it's mounted.
-
-Full request/response examples live in `server/test.rest`.
 
 ## Example Workflow
 
@@ -308,18 +279,6 @@ Full request/response examples live in `server/test.rest`.
 7. Vehicle and driver both flip back to `Available`.
 8. Log a maintenance record (e.g. Oil Change) → vehicle flips to `In Shop`, drops out of the dispatch pool.
 9. Reports update - operational cost and fuel efficiency reflect the latest trip and fuel log.
-
-## Deliverables Checklist
-
-- [ ] Responsive web interface
-- [ ] Authentication with RBAC
-- [ ] CRUD for Vehicles and Drivers
-- [ ] Trip Management with validations
-- [ ] Automatic status transitions
-- [ ] Maintenance workflow
-- [ ] Fuel & Expense tracking
-- [ ] Dashboard with KPIs
-- [ ] Charts and visual analytics
 
 ## Team
 
